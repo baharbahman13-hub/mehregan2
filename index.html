@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جشن مهرگان 🍁 | بازی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+
+  body{
+    font-family:'Vazirmatn', Tahoma, sans-serif;
+    min-height:100vh;
+    padding:14px;
+    display:flex;
+    justify-content:center;
+    color:#fff;
+    background:
+      radial-gradient(circle at 15% 0%, #7a2450 0%, transparent 55%),
+      radial-gradient(circle at 90% 10%, #a8481f 0%, transparent 50%),
+      linear-gradient(170deg, #3a1030 0%, #240a1e 55%, #160512 100%);
+    background-attachment:fixed;
+  }
+
+  .wrap{ width:100%; max-width:640px; }
+
+  /* ---------- نوار بالا ---------- */
+  .hud{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:12px; padding:0 4px;
+  }
+  .brand{ font-weight:900; font-size:1.15rem; color:#ffce54; letter-spacing:.3px; }
+  .stars{
+    background:rgba(255,255,255,.09);
+    border:1px solid rgba(255,206,84,.25);
+    padding:6px 14px; border-radius:99px;
+    font-weight:700; font-size:.95rem;
+  }
+
+  /* ---------- سفره ---------- */
+  .sofreh{
+    background:linear-gradient(180deg, rgba(255,206,84,.10), rgba(255,138,61,.05));
+    border:1px dashed rgba(255,206,84,.35);
+    border-radius:20px;
+    padding:10px 14px 12px;
+    margin-bottom:14px;
+  }
+  .sofreh-label{ font-size:.75rem; color:rgba(255,255,255,.6); margin-bottom:6px; }
+  .sofreh-items{
+    display:flex; flex-wrap:wrap; gap:5px;
+    min-height:32px; font-size:23px; line-height:1;
+  }
+  .sofreh-item{ display:inline-block; animation:pop .5s cubic-bezier(.2,1.7,.4,1); }
+  @keyframes pop{
+    0%{ transform:scale(0) rotate(-45deg); opacity:0; }
+    100%{ transform:scale(1) rotate(0); opacity:1; }
+  }
+  .bar{
+    height:9px; margin-top:10px;
+    background:rgba(255,255,255,.12);
+    border-radius:99px; overflow:hidden;
+  }
+  .bar-fill{
+    height:100%; width:0%;
+    background:linear-gradient(90deg,#ffce54,#ff8a3d);
+    border-radius:99px;
+    transition:width .5s ease;
+  }
+
+  /* ---------- کارت ---------- */
+  .card{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,206,84,.22);
+    border-radius:26px;
+    padding:24px 20px;
+    box-shadow:0 24px 60px rgba(0,0,0,.4);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    animation:rise .4s ease;
+  }
+  @keyframes rise{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
+
+  .center{ text-align:center; }
+  .big-emoji{ font-size:62px; line-height:1; margin-bottom:10px; animation:float 2.6s ease-in-out infinite; }
+  @keyframes float{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } }
+
+  .title{
+    font-size:1.85rem; font-weight:900; color:#ffce54;
+    margin-bottom:12px; text-shadow:0 3px 18px rgba(255,138,61,.5);
+  }
+  .lead{ font-size:1.02rem; line-height:2; color:rgba(255,255,255,.9); margin-bottom:10px; }
+  .lead.small{ font-size:.9rem; color:rgba(255,255,255,.68); line-height:1.9; }
+
+  /* ---------- پرسش ---------- */
+  .qnum{
+    display:inline-block;
+    background:rgba(255,206,84,.15);
+    color:#ffce54;
+    font-size:.78rem; font-weight:700;
+    padding:5px 13px; border-radius:99px;
+    margin-bottom:14px;
+  }
+  .qtext{
+    font-size:1.28rem; font-weight:800; line-height:1.95;
+    margin-bottom:18px;
+  }
+
+  .options{ display:flex; flex-direction:column; gap:10px; }
+
+  .option{
+    font-family:inherit;
+    font-size:1.02rem; font-weight:700;
+    text-align:right;
+    padding:15px 18px;
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,.16);
+    background:rgba(255,255,255,.06);
+    color:#fff;
+    cursor:pointer;
+    transition:transform .15s, background .2s, border-color .2s;
+  }
+  .option:hover:not(.locked){
+    background:rgba(255,206,84,.14);
+    border-color:rgba(255,206,84,.5);
+    transform:translateX(-5px);
+  }
+  .option:active:not(.locked){ transform:scale(.98); }
+
+  .option.correct{
+    background:linear-gradient(135deg,#2ecc71,#1e9e58);
+    border-color:transparent;
+    animation:shine .45s ease;
+  }
+  @keyframes shine{ 0%{ transform:scale(1); } 45%{ transform:scale(1.045); } 100%{ transform:scale(1); } }
+
+  .option.wrong{
+    background:linear-gradient(135deg,#e74c3c,#b03024);
+    border-color:transparent;
+    opacity:.85;
+  }
+  .option.locked{ cursor:default; }
+
+  .fact{
+    margin-top:18px;
+    background:rgba(255,206,84,.12);
+    border-right:4px solid #ffce54;
+    border-radius:14px;
+    padding:14px 16px;
+    font-size:.93rem;
+    line-height:2;
+    animation:rise .35s ease;
+  }
+  .fact b{ color:#ffce54; display:block; margin-bottom:4px; }
+
+  /* ---------- دکمه ---------- */
+  .btn-primary{
+    display:block; width:100%; margin-top:18px;
+    font-family:inherit;
+    font-size:1.08rem; font-weight:900;
+    padding:16px;
+    border:none; border-radius:17px;
+    background:linear-gradient(135deg,#ffce54,#ff8a3d);
+    color:#3a1030;
+    cursor:pointer;
+    box-shadow:0 10px 28px rgba(255,138,61,.38);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 34px rgba(255,138,61,.5); }
+  .btn-primary:active{ transform:translateY(1px) scale(.99); }
+
+  .btn-ghost{
+    display:block; width:100%; margin-top:10px;
+    font-family:inherit; font-size:.95rem; font-weight:700;
+    padding:13px;
+    border-radius:16px;
+    background:transparent;
+    border:1px solid rgba(255,255,255,.25);
+    color:rgba(255,255,255,.85);
+    cursor:pointer;
+  }
+
+  /* ---------- پایان ---------- */
+  .final-list{
+    display:flex; flex-wrap:wrap; justify-content:center; gap:12px;
+    margin:18px 0 4px;
+  }
+  .final-item{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,206,84,.25);
+    border-radius:16px;
+    padding:10px 12px;
+    min-width:78px;
+    animation:pop .5s cubic-bezier(.2,1.7,.4,1) backwards;
+  }
+  .final-item .e{ font-size:26px; display:block; }
+  .final-item .n{ font-size:.7rem; color:rgba(255,255,255,.75); margin-top:4px; display:block; }
+
+  .score-box{
+    display:inline-block;
+    background:rgba(255,206,84,.15);
+    border:1px solid rgba(255,206,84,.35);
+    color:#ffce54;
+    font-weight:900;
+    padding:10px 22px; border-radius:99px;
+    margin:8px 0 4px;
+    font-size:1.05rem;
+  }
+
+  /* ---------- موسسه ---------- */
+  .institute-box {
+    margin: 15px auto 22px;
+    text-align: center;
+  }
+  .institute-name {
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: #ffce54;
+    letter-spacing: 0.3px;
+    line-height: 1.8;
+    text-shadow: 0 2px 10px rgba(255,138,61,.4);
+  }
+
+  /* ---------- طومار قدیمی ---------- */
+  .scroll-wrap{
+    margin:24px auto 6px;
+    max-width:460px;
+    position:relative;
+    animation:rise .55s ease .15s backwards;
+  }
+  .scroll-roll{
+    height:20px;
+    background:linear-gradient(180deg,
+      #5c2a08 0%, #8b4513 25%, #a85e1e 50%, #6b3410 75%, #3a1804 100%);
+    border-radius:999px;
+    box-shadow:
+      0 4px 10px rgba(0,0,0,.55),
+      inset 0 2px 3px rgba(255,200,140,.35),
+      inset 0 -2px 4px rgba(0,0,0,.5);
+    position:relative;
+    z-index:3;
+  }
+  .scroll-roll.top{ margin-bottom:-9px; }
+  .scroll-roll.bottom{ margin-top:-9px; }
+  .scroll-roll::before,
+  .scroll-roll::after{
+    content:'';
+    position:absolute;
+    top:50%; transform:translateY(-50%);
+    width:15px; height:15px;
+    border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, #c58b52, #3a1804 75%);
+    box-shadow:0 2px 4px rgba(0,0,0,.6);
+  }
+  .scroll-roll.top::before{ right:-6px; }
+  .scroll-roll.top::after{ left:-6px; }
+  .scroll-roll.bottom::before{ right:-6px; }
+  .scroll-roll.bottom::after{ left:-6px; }
+
+  .scroll-body{
+    background:
+      radial-gradient(ellipse at 15% 8%, rgba(255,246,215,.7), transparent 55%),
+      radial-gradient(ellipse at 88% 95%, rgba(180,120,60,.3), transparent 55%),
+      radial-gradient(circle at 50% 50%, rgba(140,90,40,.08), transparent 70%),
+      linear-gradient(180deg, #f6e6bf 0%, #edd7a6 45%, #e0c485 100%);
+    padding:20px 18px 14px;
+    color:#4a2208;
+    border-left:2px solid rgba(74,34,8,.35);
+    border-right:2px solid rgba(74,34,8,.35);
+    box-shadow:
+      inset 0 0 40px rgba(140,90,40,.4),
+      inset 0 0 80px rgba(200,150,80,.2),
+      0 8px 24px rgba(0,0,0,.4);
+    position:relative;
+    overflow:hidden;
+  }
+  .scroll-body::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(140,90,40,.07) 0 1px, transparent 1px 7px),
+      repeating-linear-gradient(0deg, rgba(140,90,40,.05) 0 1px, transparent 1px 9px);
+    opacity:.55;
+    pointer-events:none;
+  }
+  .scroll-title{
+    font-family:'Amiri', 'Vazirmatn', serif;
+    font-size:.95rem;
+    font-weight:700;
+    text-align:center;
+    color:#6b3410;
+    margin-bottom:14px;
+    letter-spacing:.5px;
+    position:relative;
+    z-index:1;
+  }
+  .scroll-title::after{
+    content:'✦ ✦ ✦';
+    display:block;
+    font-size:.7rem;
+    color:#a85e1e;
+    margin-top:6px;
+    letter-spacing:6px;
+  }
+  .couplet{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px 22px;
+    margin-bottom:12px;
+    font-family:'Amiri', 'Vazirmatn', serif;
+    font-size:1rem;
+    line-height:1.9;
+    color:#3d1c04;
+    position:relative;
+    z-index:1;
+  }
+  .couplet span{
+    text-align:center;
+    white-space:nowrap;
+  }
+  .couplet span:first-child::after{
+    content:' ✦';
+    color:#a85e1e;
+    font-size:.65rem;
+    vertical-align:middle;
+    opacity:.7;
+  }
+  .scroll-author{
+    font-family:'Amiri', serif;
+    text-align:center;
+    font-size:.82rem;
+    color:#6b3410;
+    margin-top:12px;
+    padding-top:10px;
+    border-top:1px dashed rgba(107,52,16,.4);
+    position:relative;
+    z-index:1;
+  }
+
+  /* ---------- کاغذرنگی ---------- */
+  .confetti{
+    position:fixed; top:-24px;
+    width:9px; height:15px;
+    border-radius:2px;
+    z-index:999;
+    pointer-events:none;
+    animation:fall linear forwards;
+  }
+  @keyframes fall{
+    to{ transform:translateY(108vh) rotate(760deg); }
+  }
+
+  @media (max-width:420px){
+    .title{ font-size:1.55rem; }
+    .qtext{ font-size:1.12rem; }
+    .card{ padding:20px 16px; border-radius:22px; }
+    .sofreh-items{ font-size:20px; }
+    .option{ font-size:.96rem; padding:13px 15px; }
+    .couplet{ font-size:.86rem; gap:4px 12px; }
+    .scroll-body{ padding:16px 12px 12px; }
+    .institute-name { font-size: .95rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="hud">
+    <div class="brand">🍁 جشن مهرگان</div>
+    <div class="stars">⭐ <span id="stars">۰</span></div>
+  </div>
+
+  <div class="sofreh">
+    <div class="sofreh-label">سفرهٔ مهرگان — هر پاسخ درست یه چیز روش میذاره</div>
+    <div class="sofreh-items" id="sofrehItems"></div>
+    <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+  </div>
+
+  <div class="card" id="card"></div>
+</div>
+
+<script>
+/* ================= داده‌ها ================= */
+const QUESTIONS = [
+  {
+    q: "جشن مهرگان در کدام فصل برگزار می‌شود؟",
+    options: ["بهار", "پاییز", "زمستان"],
+    answer: 1,
+    reward: { emoji: "🌾", name: "گندم" },
+    fact: "مهرگان هم‌زمان با اعتدال پاییزی است؛ روزی که شب و روز با هم برابر می‌شوند."
+  },
+  {
+    q: "جشن مهرگان در کدام روز برگزار می‌شود؟",
+    options: ["روز مهر از ماه مهر", "روز نوروز از ماه فروردین", "اولین روز هر ماه"],
+    answer: 0,
+    reward: { emoji: "🫘", name: "حبوبات" },
+    fact: "ایرانیان هر وقت نام روز با نام ماه یکی می‌شد، آن روز را جشن می‌گرفتند. مهرگان در روز «مهر» از ماه «مهر» است."
+  },
+  {
+    q: "نام «مهر» با کدام ایزد پیوند خورده است؟",
+    options: ["ایزد تیشتر", "ایزد میترا", "ایزد بهرام"],
+    answer: 1,
+    reward: { emoji: "🥛", name: "شیر" },
+    fact: "مهر با ایزد مهر، یعنی «میترا»، پیوند دارد."
+  },
+  {
+    q: "کدام‌یک از معانی «مهر» نیست؟",
+    options: ["پیمان و دوستی", "روشنایی و عشق", "جنگ و خشم"],
+    answer: 2,
+    reward: { emoji: "🍎", name: "میوه‌های پاییزی" },
+    fact: "مهر یعنی پیمان و عهد بستن، روشنایی، دوستی، عشق و محبت."
+  },
+  {
+    q: "حلقهٔ ازدواج که نشانهٔ عشق و پیمان است، از کدام ایزد برگرفته شده؟",
+    options: ["ایزد مهر (میترا)", "ایزد آب", "ایزد آتش"],
+    answer: 0,
+    reward: { emoji: "🍇", name: "میوه‌های پاییزی" },
+    fact: "حلقه نشانهٔ عشق و پیمان است و از ایزد مهر گرفته شده."
+  },
+  {
+    q: "ایزد مهر نماد چیست؟",
+    options: ["خواب و رؤیا", "عدالت و دادگستری", "تاریکی و سرما"],
+    answer: 1,
+    reward: { emoji: "⚖️", name: "ترازو" },
+    fact: "ایزد مهر نماد عدالت، داوری و دادگستری است؛ برای همین در سفرهٔ مهرگان ترازو می‌گذارند."
+  },
+  {
+    q: "بعد از نوروز، بزرگ‌ترین جشن ایرانیان کدام است؟",
+    options: ["شب یلدا", "مهرگان", "سیزده‌به‌در"],
+    answer: 1,
+    reward: { emoji: "🍞", name: "نان هفت غله" },
+    fact: "مهرگان بعد از نوروز، بزرگ‌ترین جشن ایرانیان بوده است."
+  },
+  {
+    q: "در جشن مهرگان یاد پیروزی چه کسانی را گرامی می‌داریم؟",
+    options: ["کاوهٔ آهنگر و فریدون بر ضحاک", "رستم بر سهراب", "سیاوش بر افراسیاب"],
+    answer: 0,
+    reward: { emoji: "🥜", name: "آجیل" },
+    fact: "یکی از دلیل‌های برگزاری مهرگان، پیروزی کاوهٔ آهنگر و فریدون بر ضحاک است."
+  },
+  {
+    q: "در سفرهٔ مهرگان کدام‌یک گذاشته نمی‌شود؟",
+    options: ["غلات و حبوبات", "شیر و میوه‌های پاییزی", "ماهی و سبزهٔ نوروزی"],
+    answer: 2,
+    reward: { emoji: "🟪", name: "پارچه ارغوانی" },
+    fact: "در سفرهٔ مهرگان غلات و حبوبات، شیر، میوه‌های پاییزی، پارچهٔ ارغوانی و ترازو گذاشته می‌شود."
+  },
+  {
+    q: "کدام‌یک دلیل برگزاری جشن مهرگان نیست؟",
+    options: ["جشن برداشت محصول و سپاسگزاری", "پیروزی کاوه بر ضحاک", "جشن آمدن بهار"],
+    answer: 2,
+    reward: { emoji: "🕯️", name: "شمع" },
+    fact: "مهرگان جشن برداشت محصول و سپاسگزاری، یاد پیروزی کاوه و فریدون، و گرامیداشت برابری نام روز و ماه است."
+  }
+];
+
+/* ================= وضعیت بازی ================= */
+let qIndex = 0;
+let stars = 0;
+let mistakes = 0;
+let collected = [];
+
+const cardEl = document.getElementById('card');
+const sofrehItemsEl= document.getElementById('sofrehItems');
+const barFillEl = document.getElementById('barFill');
+const starsEl = document.getElementById('stars');
+
+const toFa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+
+/* ================= صدا ================= */
+let actx = null;
+function playSound(type){
+  try{
+    if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator();
+    const g = actx.createGain();
+    o.type = 'sine';
+    o.connect(g); g.connect(actx.destination);
+    const t = actx.currentTime;
+    if(type === 'correct'){
+      o.frequency.setValueAtTime(660, t);
+      o.frequency.setValueAtTime(880, t + 0.09);
+      o.frequency.setValueAtTime(1180, t + 0.18);
+    }else if(type === 'wrong'){
+      o.frequency.setValueAtTime(230, t);
+      o.frequency.setValueAtTime(150, t + 0.12);
+    }else{
+      o.frequency.setValueAtTime(520, t);
+      o.frequency.setValueAtTime(780, t + 0.1);
+      o.frequency.setValueAtTime(1040, t + 0.2);
+    }
+    g.gain.setValueAtTime(0.07, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.34);
+    o.start(t); o.stop(t + 0.36);
+  }catch(e){ /* بی‌صدا */ }
+}
+
+/* ================= رابط ================= */
+function updateHud(){
+  starsEl.textContent = toFa(stars);
+  barFillEl.style.width = (collected.length / QUESTIONS.length * 100) + '%';
+}
+
+function addSofrehItem(reward){
+  const s = document.createElement('span');
+  s.className = 'sofreh-item';
+  s.textContent = reward.emoji;
+  s.title = reward.name;
+  sofrehItemsEl.appendChild(s);
+}
+
+/* ---------- صفحهٔ شروع ---------- */
+function renderStart(){
+  qIndex = 0; stars = 0; mistakes = 0; collected = [];
+  sofrehItemsEl.innerHTML = '';
+  updateHud();
+
+  cardEl.innerHTML = `
+    <div class="center">
+      <div class="big-emoji">🍁</div>
+      <h1 class="title">جشن مهرگان</h1>
+      <p class="lead">
+        سلام! می‌خوای با هم سفرهٔ <b>مهرگان</b> رو بچینیم؟
+      </p>
+      <p class="lead small">
+        مهرگان جشن پاییزی ایرانیان است؛ جشن برداشت محصول، دوستی و پیمان.
+        <br>با هر پاسخ درست، یه چیز خوشمزه یا قشنگ روی سفره می‌ذاریم!
+      </p>
+      <button class="btn-primary" id="startBtn">شروع بازی 🎮</button>
+    </div>
+  `;
+  document.getElementById('startBtn').addEventListener('click', () => {
+    playSound('correct');
+    renderQuestion();
+  });
+}
+
+/* ---------- پرسش ---------- */
+function renderQuestion(){
+  const q = QUESTIONS[qIndex];
+  mistakes = 0;
+
+  cardEl.innerHTML = `
+    <div class="qnum">پرسش ${toFa(qIndex + 1)} از ${toFa(QUESTIONS.length)}</div>
+    <h2 class="qtext">${q.q}</h2>
+    <div class="options" id="options">
+      ${q.options.map((o, i) =>
+        `<button class="option" data-i="${i}">${o}</button>`
+      ).join('')}
+    </div>
+    <div id="feedback"></div>
+  `;
+
+  cardEl.querySelectorAll('.option').forEach(btn => {
+    btn.addEventListener('click', () => chooseOption(btn, q));
+  });
+}
+
+function chooseOption(btn, q){
+  if(btn.classList.contains('locked')) return;
+  const i = Number(btn.dataset.i);
+
+  if(i === q.answer){
+    btn.classList.add('correct');
+    cardEl.querySelectorAll('.option').forEach(b => b.classList.add('locked'));
+    playSound('correct');
+
+    if(mistakes === 0) stars++;
+    collected.push(q.reward);
+    addSofrehItem(q.reward);
+    updateHud();
+
+    showFeedback(q, mistakes === 0);
+  }else{
+    mistakes++;
+    btn.classList.add('wrong', 'locked');
+    btn.disabled = true;
+    playSound('wrong');
+  }
+}
+
+function showFeedback(q, perfect){
+  const fb = document.getElementById('feedback');
+  const isLast = qIndex === QUESTIONS.length - 1;
+  fb.innerHTML = `
+    <div class="fact">
+      <b>${perfect ? '✅ آفرین! درست بود' : '💡 خوب بود، یاد گرفتیم!'}</b>
+      ${q.fact}
+    </div>
+    <button class="btn-primary" id="nextBtn">
+      ${isLast ? 'دیدن سفرهٔ مهرگان 🎉' : 'پرسش بعدی ➜'}
+    </button>
+  `;
+  document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+}
+
+function nextQuestion(){
+  qIndex++;
+  if(qIndex >= QUESTIONS.length){
+    renderEnd();
+  }else{
+    renderQuestion();
+    cardEl.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+}
+
+/* ---------- پایان ---------- */
+function renderEnd(){
+  playSound('correct');
+  confetti();
+
+  const itemsHtml = collected.map((r, i) => `
+    <div class="final-item" style="animation-delay:${i * 0.08}s">
+      <span class="e">${r.emoji}</span>
+      <span class="n">${r.name}</span>
+    </div>
+  `).join('');
+
+  cardEl.innerHTML = `
+    <div class="center">
+      <div class="big-emoji">🎉</div>
+      <h1 class="title">مهرگان فرخنده</h1>
+
+      <div class="institute-box">
+        <div class="institute-name">موسسه فرهنگی هنری دنیای لذت خواندن</div>
+      </div>
+
+      <p class="lead">
+        سفرهٔ مهرگان رو با ${toFa(collected.length)} چیز قشنگ چیدی!
+      </p>
+      <div class="score-box">⭐ تو ${toFa(stars)} ستاره گرفتی</div>
+      <div class="final-list">${itemsHtml}</div>
+
+      <div class="scroll-wrap">
+        <div class="scroll-roll top"></div>
+        <div class="scroll-body">
+          <div class="scroll-title">از شاهنامهٔ فردوسی</div>
+          <div class="couplet"><span>فریدون چو شد بر جهان کامگار</span><span>ندانست جز خویشتن شهریار</span></div>
+          <div class="couplet"><span>به رسم کیان تاج و تخت مهی</span><span>بیاراست با کاخ شاهنشهی</span></div>
+          <div class="couplet"><span>به روز خجسته سر مهرماه</span><span>به سر برنهاد آن کیانی کلاه</span></div>
+          <div class="couplet"><span>زمانه بی‌اندوه گشت از بدی</span><span>گرفتند یک سر ره ایزدی</span></div>
+          <div class="scroll-author">— فردوسی، شاهنامه</div>
+        </div>
+        <div class="scroll-roll bottom"></div>
+      </div>
+
+      <p class="lead small" style="margin-top:20px">
+        یادت باشه: مهرگان یعنی <b>دوستی</b>، <b>پیمان</b> و <b>روشنایی</b>.
+      </p>
+      <button class="btn-primary" id="againBtn">دوباره بازی کن 🔄</button>
+      <button class="btn-ghost" id="learnBtn">یه چیز دیگه یادم بده 📖</button>
+    </div>
+  `;
+
+  document.getElementById('againBtn').addEventListener('click', renderStart);
+  document.getElementById('learnBtn').addEventListener('click', renderLearn);
+  updateHud();
+}
+
+/* ---------- صفحهٔ دانستنی ---------- */
+function renderLearn(){
+  cardEl.innerHTML = `
+    <div class="center">
+      <div class="big-emoji">📖</div>
+      <h1 class="title">چند دانستنی مهرگانی</h1>
+    </div>
+    <div class="fact" style="margin-top:16px">
+      <b>🍂 اعتدال پاییزی</b>
+      مهرگان هم‌زمان با اعتدال پاییزی است؛ وقتی شب و روز برابر می‌شوند.
+    </div>
+    <div class="fact" style="margin-top:12px">
+      <b>🎊 دومین جشن بزرگ</b>
+      مهرگان بعد از نوروز، بزرگ‌ترین جشن ایرانیان بوده است.
+    </div>
+    <div class="fact" style="margin-top:12px">
+      <b>📅 روز مهر از ماه مهر</b>
+      ایرانیان هر وقت نام روز با نام ماه برابر می‌شد، آن روز را جشن می‌گرفتند.
+    </div>
+    <div class="fact" style="margin-top:12px">
+      <b>💛 ایزد مهر (میترا)</b>
+      مهر یعنی پیمان و عهد بستن، روشنایی، دوستی، عشق و محبت.
+      ایزد مهر نماد عدالت و دادگستری است و حلقهٔ ازدواج از او گرفته شده.
+    </div>
+    <div class="fact" style="margin-top:12px">
+      <b>🌾 سفرهٔ مهرگان</b>
+      غلات، حبوبات، شیر، میوه‌های پاییزی، نان هفت غله، پارچهٔ ارغوانی و ترازو.
+    </div>
+    <div class="fact" style="margin-top:12px">
+      <b>🛡️ کاوه و فریدون</b>
+      در مهرگان یاد پیروزی کاوهٔ آهنگر و فریدون بر ضحاک را گرامی می‌داریم.
+    </div>
+    <button class="btn-primary" id="backBtn">برگرد به پایان بازی 🎉</button>
+  `;
+  document.getElementById('backBtn').addEventListener('click', renderEnd);
+}
+
+/* ---------- کاغذرنگی ---------- */
+function confetti(){
+  const colors = ['#ffce54', '#ff8a3d', '#e74c3c', '#9b59b6', '#2ecc71', '#3498db', '#f39c12'];
+  for(let i = 0; i < 80; i++){
+    const d = document.createElement('div');
+    d.className = 'confetti';
+    d.style.left = Math.random() * 100 + 'vw';
+    d.style.background = colors[Math.floor(Math.random() * colors.length)];
+    d.style.animationDelay = (Math.random() * 1.4) + 's';
+    d.style.animationDuration = (2.2 + Math.random() * 2) + 's';
+    d.style.width = (6 + Math.random() * 6) + 'px';
+    d.style.height = (10 + Math.random() * 10) + 'px';
+    document.body.appendChild(d);
+    setTimeout(() => d.remove(), 6000);
+  }
+}
+
+/* ================= شروع ================= */
+renderStart();
+</script>
+</body>
+</html>
